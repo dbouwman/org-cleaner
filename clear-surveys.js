@@ -4,9 +4,15 @@ require('isomorphic-fetch');
 require('isomorphic-form-data');
 
 const { UserSession } = require('@esri/arcgis-rest-auth');
-const { getSelf, request } = require('@esri/arcgis-rest-request');
-const { getUser } = require("@esri/arcgis-rest-users");
-const { removeItem, searchItems, getItem } = require("@esri/arcgis-rest-items");
+const { request } = require('@esri/arcgis-rest-request');
+const { 
+  getSelf,
+  getUser ,
+  searchItems,
+  getItem,
+  removeItem
+} = require('@esri/arcgis-rest-portal');
+
 const { getProp, cloneObject, maybePush, maybeAdd } = require('@esri/hub-common');
 
 // Setup request options... we use this through all the calls...
@@ -27,7 +33,7 @@ process(requestOptions);
  */
 function process(ro) {
   // get the portalSelf so we have the orgId
- return getSelf(ro)
+  return getSelf(ro)
    .then((portalResponse) => {
       const orgId = portalResponse.id;
       console.log(`Got portal ${orgId} and user: ${portalResponse.user.username}`);
@@ -59,7 +65,7 @@ function process(ro) {
  */
 function removeForms (ro) {
   const owner = ro.authentication.username;
-  let query = `owner: "${owner}" AND type: "Form" AND typekeywords: "hubDebug"`;
+  let query = `owner: '${owner}' AND type: 'Form' AND typekeywords: 'hubDebug'`;
     const form = {
       searchForm: {
        q: query,
@@ -191,7 +197,7 @@ function getFolderContent (folderId, ro) {
  */
 function removeOrphanServices (ro) {
   const owner = ro.authentication.username;
-  let query = `title: "survey123" owner: "${owner}" AND type: "Feature Service"`;
+  let query = `title: 'survey123' owner: '${owner}' AND type: 'Feature Service'`;
     const form = {
       searchForm: {
        q: query,
@@ -260,7 +266,7 @@ function doesItemExist(itemId, ro) {
  */
 function removeServices(ro) {
   const owner = ro.authentication.username;
-  let query = `title: "survey123_" owner: "${owner}" AND type: "Feature Service"`;
+  let query = `title: 'survey123_' owner: '${owner}' AND type: 'Feature Service'`;
     const form = {
       searchForm: {
        q: query,
